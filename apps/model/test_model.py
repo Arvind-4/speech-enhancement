@@ -5,18 +5,15 @@ os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
 
 import tensorflow as tf
 import soundfile as sf
-from .data_tools import scaled_in, inv_scaled_ou
-from .data_tools import (
+from data_tools import scaled_in, inv_scaled_ou
+from data_tools import (
     audio_files_to_numpy,
     numpy_audio_to_matrix_spectrogram,
     matrix_spectrogram_to_numpy_audio,
 )
-from .config import get_settings
+from config import get_settings
 
 settings = get_settings()
-
-
-
 
 
 def prediction(
@@ -32,7 +29,7 @@ def prediction(
     loaded_model = tf.keras.models.load_model(str(settings.MODEL_FILE))
     if not os.path.exists(dir_save_prediction):
         os.makedirs(dir_save_prediction)
-    
+
     for file in os.listdir(audio_dir_prediction):
         print("Denoising audio %s" % file)
         audio = audio_files_to_numpy(
@@ -58,6 +55,4 @@ def prediction(
         )
         nb_samples = audio_denoise_recons.shape[0]
         denoise_long = audio_denoise_recons.reshape(1, nb_samples * frame_length) * 10
-        sf.write(
-            dir_save_prediction + "/" + file, 
-            denoise_long[0, :], sample_rate)
+        sf.write(dir_save_prediction + "/" + file, denoise_long[0, :], sample_rate)

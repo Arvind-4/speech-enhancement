@@ -39,5 +39,3 @@ def get_settings():
         DIR_SAVE_PREDICTION=DIR_SAVE_PREDICTION,
     )
     return settings
-
-

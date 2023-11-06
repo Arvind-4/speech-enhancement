@@ -1,11 +1,15 @@
+import os
+
+os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
+
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import ModelCheckpoint
 
-from .model_unet import unet
-from .data_tools import scaled_in, scaled_ou
+from model_unet import unet
+from data_tools import scaled_in, scaled_ou
 
 
 def training(
