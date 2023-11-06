@@ -7,6 +7,7 @@ share/
 apps/test_data/saved_predictions/
 __pycache__/
 *.py[cod]
+etc/
 *$py.class
 *.so
 .Python
