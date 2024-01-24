@@ -1,1 +1,1 @@
--r ./requirements/new.txt
+-r requirements/production.txt
