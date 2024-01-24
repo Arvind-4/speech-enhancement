@@ -1,5 +1,3 @@
-import os
-
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import (
@@ -13,7 +11,7 @@ from tensorflow.keras.layers import (
 )
 
 
-def unet(pretrained_weights=None, input_size=(128, 128, 1)):
+def unet(input_size=(128, 128, 1)):
     size_filter_in = 16
     kernel_init = "he_normal"
     activation_layer = None
@@ -220,8 +218,5 @@ def unet(pretrained_weights=None, input_size=(128, 128, 1)):
     model = Model(inputs, conv10)
 
     model.compile(optimizer="adam", loss=tf.keras.losses.Huber(), metrics=["mae"])
-
-    if pretrained_weights:
-        model.load_weights(pretrained_weights)
 
     return model

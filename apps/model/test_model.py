@@ -13,12 +13,13 @@ settings = get_settings()
 
 audio_dir_prediction = str(settings.AUDIO_DIR_PREDICTION)
 dir_save_prediction = str(settings.DIR_SAVE_PREDICTION)
-sample_rate=8000 or settings.SAMPLE_RATE
-min_duration=1.0
-frame_length=8064
-hop_length_frame=8064
-n_fft=255
-hop_length_fft=63
+sample_rate = settings.SAMPLE_RATE
+min_duration = settings.MIN_DURATION
+frame_length = settings.FRAME_LENGTH
+hop_length_frame = settings.HOP_LENGTH_FRAME
+n_fft = settings.N_FFT
+hop_length_fft = settings.HOP_LENGTH_FFT
+
 
 def prediction():
     loaded_model = tf.keras.models.load_model(str(settings.MODEL_FILE))
@@ -54,17 +55,17 @@ def prediction():
 
 
 def prediction_for_a_file(
-        file: str,
-        model: tf.keras.models.Model,
+    file: str,
+    model: tf.keras.models.Model,
 ):
     audio = audio_files_to_numpy(
-            audio_dir_prediction,
-            [file],
-            sample_rate,
-            frame_length,
-            hop_length_frame,
-            min_duration,
-        )
+        audio_dir_prediction,
+        [file],
+        sample_rate,
+        frame_length,
+        hop_length_frame,
+        min_duration,
+    )
 
     dim_square_spec = int(n_fft / 2) + 1
     m_amp_db_audio, m_pha_audio = numpy_audio_to_matrix_spectrogram(
@@ -76,17 +77,12 @@ def prediction_for_a_file(
     inv_sca_X_pred = inv_scaled_ou(X_pred)
     X_denoise = m_amp_db_audio - inv_sca_X_pred[:, :, :, 0]
     audio_denoise_recons = matrix_spectrogram_to_numpy_audio(
-        X_denoise, 
-        m_pha_audio, 
-        frame_length, 
-        hop_length_fft
+        X_denoise, m_pha_audio, frame_length, hop_length_fft
     )
-    denoise_long = audio_denoise_recons.reshape(
-        1, 
-        audio_denoise_recons.shape[0] * frame_length
-    ) * 10
+    denoise_long = (
+        audio_denoise_recons.reshape(1, audio_denoise_recons.shape[0] * frame_length)
+        * 10
+    )
     sf.write(dir_save_prediction + "/" + file, denoise_long[0, :], sample_rate)
 
     return dir_save_prediction + "/" + file
-
-
