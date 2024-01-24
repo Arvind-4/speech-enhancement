@@ -4,7 +4,7 @@ lib/
 bin/
 share/
 .ipynb_checkpoints/
-apps/test_data/saved_predictions/
+# apps/test_data/saved_predictions/
 __pycache__/
 *.py[cod]
 etc/
