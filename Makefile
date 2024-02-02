@@ -10,9 +10,8 @@ activate:
 run: 
 	bash commands/run.dev.sh  & npm run dev --prefix=apps/frontend
 
-install: 
+install-frontend: 
 	npm install --prefix=apps/frontend
-	pip install -r requirements.txt
 
 clean:
 	rm -rf ./**/__pycache__
