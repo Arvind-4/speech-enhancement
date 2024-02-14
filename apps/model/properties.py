@@ -11,15 +11,29 @@ class SignalAnalysis:
         self.noise_signal = noise_signal
 
     def sound_to_noise_ratio(self):
-        noise = self.clean_signal - self.noise_signal
-        signal = self.clean_signal
-        return 20 * np.log10(np.linalg.norm(signal) / np.linalg.norm(noise))
+        snr = 20 * np.log10(
+            np.mean(np.square(self.clean_signal))
+            / np.mean(np.square(self.noise_signal))
+        )
+        return self.round_to_three_decimal_points(snr)
 
     def percent_noise_removed(self):
+        if self.noise_signal.shape[0] != self.clean_signal.shape[0]:
+            if self.noise_signal.shape[0] < self.clean_signal.shape[0]:
+                padding = np.zeros(
+                    self.clean_signal.shape[0] - self.noise_signal.shape[0]
+                )
+                self.noise_signal = np.concatenate((self.noise_signal, padding))
+            else:
+                self.noise_signal = self.noise_signal[: self.clean_signal.shape[0]]
+
         noise = self.clean_signal - self.noise_signal
-        signal = self.clean_signal
-        ratio = np.linalg.norm(noise) / np.linalg.norm(signal)
-        return self.round_to_three_decimal_points(ratio * 100)
+        total_noise_energy = np.sum(np.square(self.noise_signal))
+        remaining_noise_energy = np.sum(np.square(noise))
+        noise_removed_percentage = (
+            (total_noise_energy - remaining_noise_energy) / total_noise_energy
+        ) * 100
+        return self.round_to_three_decimal_points(abs(noise_removed_percentage))
 
     def find_rms(self, signal):
         return np.sqrt(np.mean(np.square(signal)))
@@ -30,8 +44,10 @@ class SignalAnalysis:
 
         if is_notebook:
             self.plot_rms()
-
-        return (rms_clean_signal, rms_noise_signal)
+        return {
+            "clean_signal": self.round_to_three_decimal_points(rms_clean_signal),
+            "noise_signal": self.round_to_three_decimal_points(rms_noise_signal),
+        }
 
     def total_harmonic_distortion(self):
         fundamental_freq_amplitude = np.abs(np.fft.fft(self.clean_signal)[1])
@@ -92,8 +108,12 @@ class SignalAnalysis:
 
         if is_notebook:
             self.plot_waves(auto_corr=auto_corr, cross_corr=cross_corr)
-
-        return np.mean(auto_corr), np.mean(cross_corr)
+        mean_auto_corr = abs(10 * np.log10(np.mean(auto_corr)))
+        mean_cross_corr = abs(10 * np.log10(np.mean(cross_corr)))
+        return {
+            "auto_corr": self.round_to_three_decimal_points(mean_auto_corr),
+            "cross_corr": self.round_to_three_decimal_points(mean_cross_corr),
+        }
 
     def round_to_three_decimal_points(self, num):
         return round(num, 3)
