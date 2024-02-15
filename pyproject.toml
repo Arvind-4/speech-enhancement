@@ -18,6 +18,8 @@ uvicorn = {version = "0.20.0", extras = ["standard"]}
 protobuf = "==3.20.*"
 matplotlib = "==3.4.*"
 h5py = "2.10.0"
+django = ">=3.2,<=3.3"
+django-cors-headers = "<=4"
 
 
 [tool.poetry.group.dev.dependencies]

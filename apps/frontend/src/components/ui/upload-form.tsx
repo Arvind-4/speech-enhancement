@@ -15,7 +15,7 @@ export default function UploadFile() {
     formData.append('file', file as File);
 
     try {
-      const response = await fetch('http://localhost:8000/api/predict', {
+      const response = await fetch('https://didactic-waddle-x4q749pg75q29xr9-8000.app.github.dev/api/predict', {
         method: 'POST',
         body: formData,
       });
