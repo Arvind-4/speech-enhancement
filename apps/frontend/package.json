@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format:watch": "onchange \"**/*.{js,jsx,ts,tsx}\" -- prettier --write {{changed}}",
+    "format:watch": "onchange \"**/*.{js,jsx,ts,tsx}\" -- prettier --write {{changed}} --no-error-on-unmatched-pattern",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
