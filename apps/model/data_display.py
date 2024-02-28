@@ -70,7 +70,8 @@ def make_3plots_spec_voice_noise(
         sr=sample_rate,
         hop_length=hop_length_fft,
     )
-    plt.colorbar()
+    cl1 = plt.colorbar()
+    cl1.set_label("Noise (dB)")
     plt.subplot(3, 1, 2)
     plt.title("Spectrogram predicted voice")
     librosa.display.specshow(
@@ -80,7 +81,8 @@ def make_3plots_spec_voice_noise(
         sr=sample_rate,
         hop_length=hop_length_fft,
     )
-    plt.colorbar()
+    cl2 = plt.colorbar()
+    cl2.set_label("Noise (dB)")
     plt.subplot(3, 1, 3)
     plt.title("Spectrogram true voice")
     librosa.display.specshow(
@@ -90,7 +92,8 @@ def make_3plots_spec_voice_noise(
         sr=sample_rate,
         hop_length=hop_length_fft,
     )
-    plt.colorbar()
+    cl3 = plt.colorbar()
+    cl3.set_label("Noise (dB)")
     plt.tight_layout()
 
     return
@@ -129,6 +132,7 @@ def make_3plots_phase_voice_noise(
         sr=sample_rate,
         hop_length=hop_length_fft,
     )
+    # add label to the color bar
     plt.colorbar()
     plt.tight_layout()
 

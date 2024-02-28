@@ -4,18 +4,18 @@ from matplotlib import pyplot as plt
 
 class SignalAnalysis:
     time_unit: str = "second (ms)"
-    amplitude_unit: str = "dB"
+    amplitude_unit: str = "hertz (Hz)"
 
     def __init__(self, clean_signal, noise_signal) -> None:
         self.clean_signal = clean_signal
         self.noise_signal = noise_signal
 
-    def sound_to_noise_ratio(self):
+    def signal_to_noise_ratio(self):
         snr = 20 * np.log10(
             np.mean(np.square(self.clean_signal))
             / np.mean(np.square(self.noise_signal))
         )
-        return self.round_to_three_decimal_points(snr)
+        return abs(self.round_to_three_decimal_points(snr))
 
     def percent_noise_removed(self):
         if self.noise_signal.shape[0] != self.clean_signal.shape[0]:
